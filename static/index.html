@@ -416,6 +416,20 @@ function openReader(report, tab){
     </div>
     <iframe class="rframe" src="${esc(src)}"></iframe>
   </div>`;
+  /* CDN/网络抖动自愈：iframe 加载到 404 页时带参数自动重试（最多 3 次） */
+  const frame = main.querySelector('.rframe');
+  frame.addEventListener('load', function(){
+    try{
+      const d = this.contentDocument;
+      if(d && /not found|404/i.test(d.title || '')){
+        const tries = (+this.dataset.retry || 0) + 1;
+        this.dataset.retry = tries;
+        if(tries <= 3){
+          setTimeout(()=>{ try{ this.src = src + (src.includes('?') ? '&' : '?') + 'r=' + Date.now(); }catch(e){} }, 1200 * tries);
+        }
+      }
+    }catch(e){}
+  });
   main.querySelector('.back').addEventListener('click', renderList);
   const nw = main.querySelector('.newwin');
   nw.addEventListener('click', ()=> window.open(src, '_blank'));
