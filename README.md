@@ -67,6 +67,18 @@ summaries/Goldman Sachs/铜/2026-11-12 Base Metals Comment.html
 - **排序**：日期新→旧 / 旧→新 / 标题
 - **今日更新横幅**：只显示当天新放入/更新的报告
 
+## 双机协作（2026-11-25 定稿）
+
+两台电脑都会向本仓库归档报告。**合作=并集，谁也不许覆盖谁**：
+
+- 发布一律用 **`python sync_publish.py "提交说明"`**（AI 会话也用它），它自动：
+  1. 提交本地批次 → 2. `git fetch + pull --rebase` 合并另一台的新提交 →
+  3. 重新生成静态分享版（此时数据=两台电脑的并集）→ 4. 提交 → 5. 推 GitHub（22/443 自动降级）+ Gitee
+- **永远禁止 force push**；push 被拒说明对方又有新提交，重跑本脚本即可
+- GitHub 完全不可达时：本地提交已安全保存，稍后重跑 `sync_publish.py` 补推
+- 两台机归档同一份报告导致同名冲突时，rebase 会停下提示人工取舍（保留更完整的一边）
+- 手工 git 操作时同样遵守：先 `git pull --rebase origin main` 再动手；`.gitignore` 已排除 `.index/`、`.scratch_*/`
+
 ## 常用路径与修改
 
 | 事项 | 位置 |

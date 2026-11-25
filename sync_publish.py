@@ -30,7 +30,8 @@ GITEE = 'gitee'
 
 
 def run(cmd, timeout=120):
-    return subprocess.run(cmd, capture_output=True, text=True, timeout=timeout)
+    return subprocess.run(cmd, capture_output=True, text=True, encoding='utf-8',
+                          errors='replace', timeout=timeout)
 
 
 def head():
