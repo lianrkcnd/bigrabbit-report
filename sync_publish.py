@@ -47,7 +47,7 @@ def fetch(remote_url):
     """fetch；SSH 22 失败自动降级 443。返回 (ok, fetched_head)。"""
     for url in (remote_url, URL_443):
         for attempt in (1, 2, 3):
-            r = run(['git', 'fetch', url, 'main'], timeout=90)
+            r = run(['git', 'fetch', url, 'main'], timeout=600)
             if r.returncode == 0:
                 head = run(['git', 'rev-parse', 'FETCH_HEAD']).stdout.strip()
                 return True, head
@@ -100,7 +100,7 @@ def main():
         pushed = False
         for attempt in (1, 2, 3):
             url = URL_443 if (remote == URL_22 and attempt > 1) else remote
-            r = run(['git', 'push', url, 'main'], timeout=180)
+            r = run(['git', 'push', url, 'main'], timeout=600)
             if r.returncode == 0:
                 print(f'  push {remote} OK')
                 pushed = True
