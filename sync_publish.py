@@ -30,8 +30,13 @@ GITEE = 'gitee'
 
 
 def run(cmd, timeout=120):
-    return subprocess.run(cmd, capture_output=True, text=True, encoding='utf-8',
-                          errors='replace', timeout=timeout)
+    try:
+        return subprocess.run(cmd, capture_output=True, text=True, encoding='utf-8',
+                              errors='replace', timeout=timeout)
+    except subprocess.TimeoutExpired:
+        class _R:  # 超时按失败处理
+            returncode, stdout, stderr = -9, '', f'timeout after {timeout}s'
+        return _R()
 
 
 def head():
